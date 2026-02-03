@@ -1,0 +1,20 @@
+name: preview_helper
+description: "A new Flutter package project."
+version: 1.0.0
+repository: https://github.com/rod-moraes/preview_helper
+homepage: https://rodmoraes.com.br
+
+environment:
+  sdk: ^3.10.7
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
