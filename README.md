@@ -15,6 +15,16 @@ Pacote Flutter para **preview editável em tempo real**: um FAB abre um menu de 
 - Suporta **tipos**: `bool`, `int`, `double`, `String`, `Enum` (com lista de opções) e versões **nullable**.
 - Opção de **editor customizado** por campo via `editorBuilder`.
 
+### Como fica na prática
+
+No Flutter Widget Preview, o card aparece com um FAB (ícone de tune); ao tocar, abre o menu com todos os campos e seus valores atuais:
+
+![Preview do Design System Card com painel de variáveis](doc/preview-panel.png)
+
+Ao escolher um campo (ex.: `description`), abre o diálogo para editar o valor — e o preview atualiza na hora ao aplicar:
+
+![Diálogo Editar variável](doc/edit-dialog.png)
+
 ---
 
 ## Instalação
