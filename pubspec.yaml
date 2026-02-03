@@ -1,5 +1,5 @@
 name: preview_helper
-description: "A new Flutter package project."
+description: "Preview editável em tempo real para o Flutter: FAB + menu de variáveis + diálogos. Ideal para @Preview com ValueNotifier."
 version: 1.0.0
 repository: https://github.com/rod-moraes/preview_helper
 homepage: https://rodmoraes.com.br

@@ -1,3 +1,3 @@
-## 0.0.1
+## 1.0.0
 
-* TODO: Describe initial release.
+- Versão inicial: `PreviewCustom`, `ValueNotifierPreview`, `ValueNotifierPreviewNullable`, diálogo de edição e editores para bool, int, double, string e enum.
