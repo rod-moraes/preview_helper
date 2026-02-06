@@ -25,11 +25,11 @@ Funciona com o **Flutter Widget Preview** (`@Preview`) e qualquer `ValueNotifier
 
 No Flutter Widget Preview, o conteúdo aparece com um FAB (ícone de tune) no canto. Ao tocar, abre o menu com todos os campos e seus valores atuais.
 
-![Preview com todos os fields — não nulos e nulos](doc/preview-panel.png)
+![Preview com todos os fields — não nulos e nulos](https://raw.githubusercontent.com/rod-moraes/preview_helper/refs/heads/main/doc/preview-panel.png)
 
 Cada item do menu mostra o nome do campo e um resumo do valor. Ao escolher um, abre o diálogo de edição.
 
-![Menu de variáveis aberto](doc/preview-menu.png)
+![Menu de variáveis aberto](https://raw.githubusercontent.com/rod-moraes/preview_helper/refs/heads/main/doc/preview-menu.png)
 
 No diálogo você edita o valor (por tipo: texto, número, slider, data, cor, enum etc.) e aplica — o preview atualiza na hora. Campos nullable exibem o botão **NULL**.
 
