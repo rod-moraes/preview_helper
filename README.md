@@ -33,7 +33,7 @@ Cada item do menu mostra o nome do campo e um resumo do valor. Ao escolher um, a
 
 No diálogo você edita o valor (por tipo: texto, número, slider, data, cor, enum etc.) e aplica — o preview atualiza na hora. Campos nullable exibem o botão **NULL**.
 
-![Diálogo Editar variável — campo Color](doc/preview-edit-dialog.png)
+![Diálogo Editar variável — campo Color](https://raw.githubusercontent.com/rod-moraes/preview_helper/refs/heads/main/doc/preview-edit-dialog.png)
 
 ---
 
