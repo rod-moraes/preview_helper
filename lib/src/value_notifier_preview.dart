@@ -31,7 +31,8 @@ class PreviewEditorParams<T> {
 typedef PreviewEditorBuilder =
     Widget? Function(BuildContext context, PreviewEditorParams params);
 
-class ValueNotifierPreview<T extends Object>
+/// Base não anulável: use as classes concretas ([BooleanPreviewKnob], etc.).
+abstract class ValueNotifierPreview<T extends Object>
     extends ValueNotifierPreviewNullable<T> {
   ValueNotifierPreview({
     required super.name,
@@ -42,10 +43,9 @@ class ValueNotifierPreview<T extends Object>
 }
 
 /// Modelo de um campo editável no preview (nome + valor reativo + opções
-/// enum). Opcionalmente recebe [editorBuilder]; se não for null e retornar
-/// um widget, esse widget é usado no diálogo de edição em vez do editor
-/// padrão.
-class ValueNotifierPreviewNullable<T> extends ValueNotifier {
+/// enum). Base abstrata: use as classes concretas ([StringPreviewKnob], etc.).
+/// Cada uma implementa [toField]. Opcionalmente [editorBuilder].
+abstract class ValueNotifierPreviewNullable<T> extends ValueNotifier<T?> {
   ValueNotifierPreviewNullable({
     required this.name,
     required T? value,
@@ -65,4 +65,7 @@ class ValueNotifierPreviewNullable<T> extends ValueNotifier {
   /// Builder opcional do editor. Se null ou se retornar null, usa os
   /// editores padrão do preview.
   final PreviewEditorBuilder? editorBuilder;
+
+  /// Retorna o [PreviewField] correspondente a esta classe. Implementado por cada knob.
+  Object? toField();
 }

@@ -70,11 +70,15 @@ class _PreviewCustomState extends State<PreviewCustom> {
     final size = box.size;
     final topLeft = box.localToGlobal(Offset.zero);
     final bottomRight = box.localToGlobal(Offset(size.width, size.height));
+    final colorScheme = Theme.of(context).colorScheme;
     showMenu<void>(
       context: context,
-      color: Colors.white,
-      surfaceTintColor: Colors.white,
-      shadowColor: Colors.black,
+      color: colorScheme.surface,
+      surfaceTintColor: colorScheme.surfaceTint,
+      shadowColor: colorScheme.shadow,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+      elevation: 6,
+      constraints: const BoxConstraints(minWidth: 240, maxWidth: 320),
       position: RelativeRect.fromLTRB(
         topLeft.dx,
         topLeft.dy - 8,
@@ -85,22 +89,28 @@ class _PreviewCustomState extends State<PreviewCustom> {
     );
   }
 
-  List<PopupMenuItem<void>> _buildMenuItems() {
-    return widget.notifiers
-        .map(
-          (preview) => PopupMenuItem<void>(
-            onTap: () {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                _showEditDialog(preview);
-              });
-            },
-            child: _PreviewMenuEntry(
-              fieldName: preview.name,
-              valueSummary: _valueSummary(preview.value),
-            ),
+  List<PopupMenuEntry<void>> _buildMenuItems() {
+    final items = <PopupMenuEntry<void>>[];
+    for (var i = 0; i < widget.notifiers.length; i++) {
+      final preview = widget.notifiers[i];
+      if (i > 0) items.add(const PopupMenuDivider(height: 1));
+      items.add(
+        PopupMenuItem<void>(
+          padding: EdgeInsets.zero,
+          onTap: () {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              _showEditDialog(preview);
+            });
+          },
+          child: _PreviewMenuEntry(
+            fieldName: preview.name,
+            valueSummary: _valueSummary(preview.value),
+            isNull: preview.value == null,
           ),
-        )
-        .toList();
+        ),
+      );
+    }
+    return items;
   }
 
   static String _valueSummary(Object? value) {
@@ -109,6 +119,14 @@ class _PreviewCustomState extends State<PreviewCustom> {
     if (value is bool) return value ? 'true' : 'false';
     if (value is num) return value.toString();
     if (value is Enum) return value.name;
+    if (value is Color) {
+      return '#${value.toARGB32().toRadixString(16).padLeft(8, '0').toUpperCase()}';
+    }
+    if (value is Duration) return '${value.inMilliseconds} ms';
+    if (value is DateTime) {
+      String pad(int x) => x.toString().padLeft(2, '0');
+      return '${value.year}-${pad(value.month)}-${pad(value.day)} ${pad(value.hour)}:${pad(value.minute)}';
+    }
     return value.toString();
   }
 
@@ -124,27 +142,34 @@ class _PreviewCustomState extends State<PreviewCustom> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Builder(
       builder: (context) {
         return Stack(
           children: [
             Padding(
-              padding: const EdgeInsets.only(bottom: 32.0),
+              padding: const EdgeInsets.only(bottom: 64.0),
               child: widget.builder(context),
             ),
             Positioned(
               right: 16,
-              bottom: 16,
+              bottom: 8,
               child: Material(
                 key: _menuButtonKey,
-                elevation: 4,
-                borderRadius: BorderRadius.circular(28),
+                elevation: 6,
+                shadowColor: colorScheme.shadow.withValues(alpha: 0.3),
+                color: colorScheme.primaryContainer,
+                borderRadius: BorderRadius.circular(16),
                 child: InkWell(
                   onTap: _onMenuButtonTap,
-                  borderRadius: BorderRadius.circular(28),
-                  child: const Padding(
-                    padding: EdgeInsets.all(12),
-                    child: Icon(Icons.tune, size: 28),
+                  borderRadius: BorderRadius.circular(16),
+                  child: Padding(
+                    padding: const EdgeInsets.all(14),
+                    child: Icon(
+                      Icons.tune_rounded,
+                      size: 26,
+                      color: colorScheme.onPrimaryContainer,
+                    ),
                   ),
                 ),
               ),
@@ -161,33 +186,67 @@ class _PreviewMenuEntry extends StatelessWidget {
   const _PreviewMenuEntry({
     required this.fieldName,
     required this.valueSummary,
+    this.isNull = false,
   });
 
   final String fieldName;
   final String valueSummary;
+  final bool isNull;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          fieldName,
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          'Valor: $valueSummary',
-          style: const TextStyle(
-            fontSize: 10,
-            fontWeight: FontWeight.bold,
-            color: Colors.black54,
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      child: Row(
+        children: [
+          Container(
+            width: 3,
+            height: 28,
+            decoration: BoxDecoration(
+              color: isNull ? colorScheme.outlineVariant : colorScheme.primary,
+              borderRadius: BorderRadius.circular(1.5),
+            ),
           ),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ],
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  fieldName,
+                  style: theme.textTheme.labelLarge?.copyWith(
+                    color: colorScheme.onSurface,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  valueSummary,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: isNull
+                        ? colorScheme.outline
+                        : colorScheme.onSurfaceVariant,
+                    fontStyle: isNull ? FontStyle.italic : null,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          Icon(
+            Icons.edit_rounded,
+            size: 16,
+            color: colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
+          ),
+        ],
+      ),
     );
   }
 }
