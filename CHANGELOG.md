@@ -2,6 +2,10 @@
 
 Todas as alterações notáveis deste projeto serão documentadas neste arquivo.
 
+## 2.0.0+1
+
+- Atualização do Readme
+
 ## 2.0.0
 
 - Versão de publicação com 12 tipos de knob (não-nulo e nullable), layout modernizado dos fields, menu e diálogo repaginados, e README com screenshots (preview panel, menu, diálogo de edição). Detalhes nas entradas 1.1.0 e 1.0.x abaixo.

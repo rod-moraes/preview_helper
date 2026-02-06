@@ -41,7 +41,7 @@ No diálogo você edita o valor (por tipo: texto, número, slider, data, cor, en
 
 ```yaml
 dependencies:
-  preview_helper: ^1.0.1
+  preview_helper: ^2.0.0+1
 ```
 
 ```bash
